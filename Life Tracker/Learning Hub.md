@@ -1,12 +1,13 @@
 ---
 type: moc
 tags: [moc]
+cssclasses: [nt-page]
 ---
 # 📚 Learning Hub
-```dataview
-TABLE area AS Area, status AS Status, hours AS Hours, resource AS Resource
-FROM "obsidian/Life Tracker/Learning"
-SORT status ASC
+
+Roadmaps: [[DSA Roadmap Home]] · [[AI-ML Roadmap Home]] · [[Command Center]]
+```dataviewjs
+await dv.view("obsidian/Life Tracker/_views/nt", { kind: "table", source: '"obsidian/Life Tracker/Learning"', type: "learning", sort: "status", cols: [["Topic","file","link"],["Area","area","area"],["Status","status","pill"],["Hours","hours","hours"],["Resource","resource","text"]] })
 ```
 **Total hours by area**
 ```dataview

@@ -1,21 +1,18 @@
 ---
 type: moc
 tags: [moc]
+cssclasses: [nt-page]
 ---
 # 🎓 Applications
 
 ## Universities (PhD / Masters abroad)
-```dataview
-TABLE program AS Program, country AS Country, status AS Status, deadline AS Deadline, professor AS Professor, funding AS Funding
-FROM "obsidian/Life Tracker/Applications/Universities"
-SORT deadline ASC
+```dataviewjs
+await dv.view("obsidian/Life Tracker/_views/nt", { kind: "table", source: '"obsidian/Life Tracker/Applications/Universities"', type: "university", sort: "deadline", cols: [["University","file","link"],["Program","program","text"],["Country","country","pill"],["Status","status","pill"],["Deadline","deadline","date"],["Funding","funding","pill"]] })
 ```
 
 ## Internships & jobs
-```dataview
-TABLE role AS Role, status AS Status, applied AS Applied, follow_up AS "Follow up", source AS Source
-FROM "obsidian/Life Tracker/Applications/Internships"
-SORT follow_up ASC
+```dataviewjs
+await dv.view("obsidian/Life Tracker/_views/nt", { kind: "table", source: '"obsidian/Life Tracker/Applications/Internships"', type: "internship", sort: "follow_up", cols: [["Company","file","link"],["Role","role","text"],["Kind","kind","pill"],["Status","status","pill"],["Applied","applied","date"],["Follow up","follow_up","date"]] })
 ```
 
 ## Follow-ups due

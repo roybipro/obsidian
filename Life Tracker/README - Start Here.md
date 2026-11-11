@@ -1,13 +1,14 @@
 ---
 type: note
 tags: [moc]
+cssclasses: [nt-page]
 ---
 # 👋 Start here (5-minute setup)
 
 1. This folder lives inside your vault at `obsidian/Life Tracker/` and syncs to GitHub with Obsidian Git.
 2. **Install Dataview (free):** Settings → *Community plugins* → *Turn on community plugins* → *Browse* → search **Dataview** → *Install* → *Enable*.
 3. **Turn on JavaScript queries:** Settings → *Dataview* → enable **Enable JavaScript Queries** and **Enable Inline JavaScript Queries**. (The charts, heatmap and Monthly Tracker need this.)
-4. Open [[🏠 Home]] and pin it (right-click the tab → *Pin*).
+4. Open [[Command Center]] and pin it (right-click the tab → *Pin*).
 
 ## Daily flow (2 minutes)
 - Click the **calendar icon** in the left ribbon → today's note is created from the template.
@@ -17,6 +18,8 @@ tags: [moc]
 ## Where things live
 | Folder / note | What |
 |---|---|
+| [[Command Center]] | your homepage: planner, due tasks, habits, roadmaps, goals |
+| [[DSA Roadmap Home]] · [[AI-ML Roadmap Home]] | the two study roadmaps (in `obsidian/`) |
 | `Daily/` | one note per day (to-dos + habits) |
 | [[📅 Monthly Tracker]] | automatic monthly totals |
 | [[Task Inbox]] | to-dos not tied to one day |

@@ -4,8 +4,11 @@ tags:
   - moc
   - home
 updated: 2026-11-11
+cssclasses: [nt-page]
 ---
 # 🧠 AI/ML Roadmap - Home
+
+Back to [[Command Center]]
 
 Math → Data Toolkit → Classical ML → Deep Learning → **NLP & LLMs** → MLOps → Research
 **Phases:** [[Phase 0 - Math|0]] · [[Phase 1 - Data Toolkit|1]] · [[Phase 2 - Classical ML|2]] · [[Phase 3 - Deep Learning|3]] · [[Phase 4 - NLP and LLMs|4]] · [[Phase 5 - MLOps|5]] · [[Phase 6 - Research and Career|6]] · [[How to Use the AI-ML Roadmap]]
@@ -260,13 +263,8 @@ GROUP BY "all"
 ```
 
 ## 📈 Progress by phase
-```dataview
-TABLE WITHOUT ID rows.phase_name[0] AS "Phase", length(rows) AS "Items",
-  length(filter(rows, (r) => r.status = "done")) AS "Done",
-  "<progress value='" + length(filter(rows, (r) => r.status = "done")) + "' max='" + length(rows) + "'></progress> " + round(100 * length(filter(rows, (r) => r.status = "done")) / length(rows)) + "%" AS "Progress"
-FROM "obsidian/AI-ML Roadmap/10 Topics" WHERE type = "topic"
-GROUP BY phase
-SORT key ASC
+```dataviewjs
+await dv.view("obsidian/Life Tracker/_views/nt", { kind: "phases", roadmap: "aiml" })
 ```
 
 ## 🔄 In progress now (keep this ≤ 3)

@@ -1,11 +1,10 @@
 ---
 type: moc
 tags: [moc]
+cssclasses: [nt-page]
 ---
 # 🔬 Research Pipeline
-```dataview
-TABLE stage AS Stage, topics AS Topics, venue AS Venue, deadline AS Deadline, next_step AS "Next step"
-FROM "obsidian/Life Tracker/Research"
-SORT choice(stage="idea",1,choice(stage="literature-review",2,choice(stage="experimenting",3,choice(stage="writing",4,choice(stage="submitted",5,6))))) ASC
+```dataviewjs
+await dv.view("obsidian/Life Tracker/_views/nt", { kind: "table", source: '"obsidian/Life Tracker/Research"', type: "research", cols: [["Project","file","link"],["Stage","stage","pill"],["Topics","topics","pill"],["Venue","venue","text"],["Deadline","deadline","date"],["Next step","next_step","text"]] })
 ```
 New project: create a note in `Research/` and copy the properties from an existing one.

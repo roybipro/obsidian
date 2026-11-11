@@ -1,6 +1,7 @@
 ---
 type: moc
 tags: [moc]
+cssclasses: [nt-page]
 ---
 # 🗣️ English Hub (IELTS 7.0 target)
 

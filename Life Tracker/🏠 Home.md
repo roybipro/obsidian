@@ -1,11 +1,17 @@
 ---
 type: dashboard
 tags: [moc]
-cssclasses: [wide-page]
+cssclasses: [wide-page, nt-page, nt-cover]
 ---
 # 🏠 Bipro's Life Tracker
 
+> 🎛️ Your homepage is now [[Command Center]] (planner, roadmaps, goals and tracking in one place).
+
 **Mission:** a funded PhD abroad (Fall 2028 intake). Open today's note with the **calendar icon** in the left ribbon (or `Ctrl/Cmd+P` → "Open today's daily note").
+
+```dataviewjs
+await dv.view("obsidian/Life Tracker/_views/nt", { kind: "stats" })
+```
 
 ## 🗓️ Planner
 > Type a task and press **Enter**. Today's list starts fresh every day, the weekly list every Monday, the monthly list on the 1st.
@@ -373,10 +379,8 @@ if (topics.length) {
 ```
 
 ## 🎯 Goals
-```dataview
-TABLE area AS Area, target AS Target, padright(padright("", round(progress/10), "█"), 10, "░") + " " + progress + "%" AS Progress, status AS Status
-FROM "obsidian/Life Tracker/Goals"
-SORT target ASC
+```dataviewjs
+await dv.view("obsidian/Life Tracker/_views/nt", { kind: "cards", type: "goal" })
 ```
 
 ## 🗂️ Navigate

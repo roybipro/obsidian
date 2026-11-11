@@ -1,6 +1,7 @@
 ---
 type: dashboard
 tags: [moc]
+cssclasses: [nt-page]
 ---
 # 📅 Monthly Tracker
 

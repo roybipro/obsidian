@@ -1,8 +1,11 @@
 ---
 type: moc
 tags: [moc]
+cssclasses: [nt-page]
 ---
 # 🗺️ PhD Roadmap (Fall 2028 intake)
+
+Back to [[Command Center]]
 
 - **Nov 2026 – Jan 2027:** Finish BSc strongly · IELTS diagnostic · daily habits · start a research idea
 - **Feb – May 2027:** IELTS preparation and exam · internship or RA role · program and professor shortlist
