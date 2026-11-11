@@ -177,10 +177,12 @@ else if (I.kind === "habits") {
   for (let i = 0; i < n; i++) {
     const d = dv.date("today").minus({ days: i }); const p = map[d.toFormat("yyyy-MM-dd")];
     const cells = HABITS.map(h => `<span class="nt-dot ${p && p[h] === true ? "on" : ""}" title="${HLABEL[h]}"></span>`);
-    rows.push([p ? p.file.link : `<span class="nt-muted">${d.toFormat("ccc d LLL")}</span>`, ...cells, p ? bar(score(p) * 100) : "<span class='nt-muted'>no note</span>"]);
+    const ME = { great: "🤩", good: "🙂", mixed: "🌗", bad: "😕", awful: "😫", okay: "😐", low: "😕" };
+    const mood = p && p.mood ? (ME[String(p.mood).toLowerCase()] || String(p.mood)) : "";
+    rows.push([p ? p.file.link : `<span class="nt-muted">${d.toFormat("ccc d LLL")}</span>`, ...cells, mood, p ? bar(score(p) * 100) : "<span class='nt-muted'>no note</span>"]);
   }
   const t = dv.el("div", "", { cls: "nt-habits" });
-  dv.table(["Day", ...HABITS.map(h => HLABEL[h]), "Score"], rows);
+  dv.table(["Day", ...HABITS.map(h => HLABEL[h]), "Mood", "Score"], rows);
   // move the table inside the wrapper for centered dot styling
   const last = dv.container.lastElementChild; if (last && last !== t) t.appendChild(last);
 }
@@ -302,4 +304,33 @@ else if (I.kind === "trend") {
   box.innerHTML = svg;
   dv.el("div", "", { attr: { style: "font-size:.8em;color:var(--text-muted);margin-top:6px" } }).innerHTML =
     `<span style="color:#3282b8">■</span> daily habit score &nbsp; <span style="color:#30a14e">━</span> 7-day average (your improvement line) &nbsp;·&nbsp; changes vs last week`;
+}
+
+// ---------- mood: tap-to-pick mood buttons for a daily note ----------
+else if (I.kind === "mood") {
+  const MOODS = [["great", "🤩", "Great", "#30a14e"], ["good", "🙂", "Good", "#3282b8"], ["mixed", "🌗", "Mixed", "#b7862b"], ["bad", "😕", "Bad", "#d9730d"], ["awful", "😫", "Awful", "#d44c47"]];
+  const page = dv.current();
+  const file = app.vault.getAbstractFileByPath(page.file.path);
+  let cur = String(page.mood ?? "").toLowerCase().trim();
+  const wrap = dv.el("div", "", { attr: { style: "display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:4px 0 12px" } });
+  wrap.createEl("span", { text: "Mood today:", attr: { style: "font-weight:600;margin-right:4px" } });
+  const btns = [];
+  const paint = () => btns.forEach(([b, k, c]) => {
+    const on = k === cur;
+    b.style.background = on ? c : "var(--background-secondary)";
+    b.style.color = on ? "#fff" : "var(--text-normal)";
+    b.style.borderColor = on ? c : "var(--background-modifier-border)";
+    b.style.fontWeight = on ? "600" : "400";
+  });
+  for (const [k, e, l, c] of MOODS) {
+    const b = wrap.createEl("button", { text: `${e} ${l}`, attr: { title: `Set mood: ${l} (tap again to clear)`, style: "padding:4px 12px;border-radius:999px;border:1px solid;cursor:pointer;font-size:.9em;box-shadow:none;height:auto" } });
+    btns.push([b, k, c]);
+    b.onclick = async () => {
+      const v = cur === k ? "" : k;
+      cur = v; paint();
+      try { await app.fileManager.processFrontMatter(file, fm => { fm.mood = v || null; }); }
+      catch (err) { new Notice("Could not save mood: " + err.message); }
+    };
+  }
+  paint();
 }

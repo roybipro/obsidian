@@ -1,6 +1,6 @@
 ---
 type: daily
-date: {{date:YYYY-MM-DD}}
+date: "{{date:YYYY-MM-DD}}"
 english: false
 paper: false
 leetcode: false
@@ -12,9 +12,14 @@ english_minutes: 0
 study_hours: 0
 topics: []
 mood:
-tags: [daily]
+tags:
+  - daily
 ---
 # {{date:dddd, D MMMM YYYY}}
+
+```dataviewjs
+await dv.view("obsidian/Life Tracker/_views/nt", { kind: "mood" })
+```
 
 > Tick your habits in the **Properties** above (English, paper, LeetCode, deep study, exercise, sleep, plan). They feed the Home dashboard and the [[📅 Monthly Tracker]].
 
