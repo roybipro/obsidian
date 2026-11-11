@@ -14,6 +14,7 @@ tags:
   - roadmap
   - phase/0
   - kind/course
+  - weekly
 updated: 2026-11-11
 ---
 # Essence of Linear Algebra (3Blue1Brown)
