@@ -23,6 +23,7 @@ Put tasks that aren't for one specific day here. Add `[due:: YYYY-MM-DD]` so the
 ## Internship
 - [ ] Ask supervisor or NLP faculty about a research assistant role [due:: 2026-11-14] [[AIUB research assistant]] #internship
 - [ ] Tailor CV for AI/ML internship applications [due:: 2026-11-18] [[Goal - Internship or RA]] #internship
+- 
 
 ## Learning
 - [ ] Finish NumPy Module 07 exercises [due:: 2026-11-13] [[NumPy (Phitron Module 07)]] #learning
