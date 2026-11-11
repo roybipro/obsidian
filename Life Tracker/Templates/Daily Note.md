@@ -10,6 +10,7 @@ sleep: false
 plan: false
 english_minutes: 0
 study_hours: 0
+topics: []
 mood:
 tags: [daily]
 ---

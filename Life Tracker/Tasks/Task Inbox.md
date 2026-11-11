@@ -29,6 +29,7 @@ Put tasks that aren't for one specific day here. Add `[due:: YYYY-MM-DD]` so the
 - [ ] Finish NumPy Module 07 exercises [due:: 2026-11-13] [[NumPy (Phitron Module 07)]] #learning
 - [ ] Solve 10 LeetCode array and hashing problems [due:: 2026-11-17] [[LeetCode - arrays hashing two pointers]] #learning
 - [ ] Watch Karpathy's GPT-from-scratch video and code along [due:: 2026-11-20] [[Transformers and attention from scratch]] #learning
+- [ ] 
 
 ## Habits
 - [ ] Sunday weekly review (see [[PhD Roadmap]]) [due:: 2026-11-15] #habits
