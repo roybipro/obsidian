@@ -199,3 +199,107 @@ else if (I.kind === "nav") {
     a.addEventListener("click", e => { e.preventDefault(); open(p ? p.file.path : it.page); });
   }
 }
+
+// ---------- consistency: streaks + 16-week heatmap (inline styles) ----------
+else if (I.kind === "consistency") {
+  const map = {}; for (const p of dailies()) map[p.date.toFormat("yyyy-MM-dd")] = score(p);
+  const today = dv.date("today"); const key = d => d.toFormat("yyyy-MM-dd");
+  // current streak (today counts if already 50%+, otherwise start from yesterday)
+  let cur = 0, d = today;
+  if (!((map[key(d)] ?? 0) >= .5)) d = d.minus({ days: 1 });
+  while ((map[key(d)] ?? 0) >= .5) { cur++; d = d.minus({ days: 1 }); }
+  // best streak ever
+  let best = 0, run = 0;
+  const keys = Object.keys(map).sort();
+  if (keys.length) {
+    for (let x = dv.date(keys[0]); x <= today; x = x.plus({ days: 1 })) { if ((map[key(x)] ?? 0) >= .5) { run++; best = Math.max(best, run); } else run = 0; }
+  }
+  const avg = (from, n) => { let s = 0; for (let i = 0; i < n; i++) s += map[key(from.minus({ days: i }))] ?? 0; return Math.round(s / n * 100); };
+  const monthDays = today.day;
+  const stats = [["🔥", `${cur}`, "Current streak (days)"], ["🏆", `${best}`, "Best streak"], ["📅", `${avg(today, 7)}%`, "Last 7 days"], ["🗓️", `${avg(today, monthDays)}%`, `This month (${monthDays} days)`]];
+  const row = dv.el("div", "", { attr: { style: "display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:6px 0 12px" } });
+  for (const [ic, v, l] of stats) {
+    const t = row.createEl("div", { attr: { style: "background:var(--background-secondary);border:1px solid var(--background-modifier-border);border-radius:10px;padding:10px 14px" } });
+    t.createEl("div", { text: ic, attr: { style: "font-size:1.05em" } });
+    t.createEl("div", { text: v, attr: { style: "font-size:1.6em;font-weight:700;line-height:1.2" } });
+    t.createEl("div", { text: l, attr: { style: "font-size:.8em;color:var(--text-muted)" } });
+  }
+  // heatmap
+  const weeks = I.weeks || 16;
+  const box = dv.el("div", "", { attr: { style: "display:flex;gap:4px;align-items:flex-start;overflow-x:auto;padding:4px 0" } });
+  const days = box.createEl("div", { attr: { style: "display:flex;flex-direction:column;gap:3px;margin-right:4px;font-size:10px;color:var(--text-faint)" } });
+  ["Mon", "", "Wed", "", "Fri", "", "Sun"].forEach(t => days.createEl("div", { text: t, attr: { style: "height:14px;line-height:14px" } }));
+  const color = s => s === undefined ? "var(--background-modifier-border)" : s >= .8 ? "#216e39" : s >= .5 ? "#30a14e" : s > 0 ? "#9be9a8" : "var(--background-modifier-border)";
+  const start = today.minus({ weeks: weeks - 1 }).startOf("week");
+  for (let w = start; w <= today; w = w.plus({ weeks: 1 })) {
+    const col = box.createEl("div", { attr: { style: "display:flex;flex-direction:column;gap:3px" } });
+    for (let i = 0; i < 7; i++) {
+      const day = w.plus({ days: i }); const s = map[key(day)];
+      col.createEl("div", { attr: { title: `${day.toFormat("ccc d LLL")}: ${s === undefined ? "no note" : Math.round(s * 100) + "%"}`, style: `width:14px;height:14px;border-radius:3px;background:${day > today ? "transparent" : color(s)}` } });
+    }
+  }
+  const lg = dv.el("div", "", { attr: { style: "display:flex;gap:6px;align-items:center;font-size:11px;color:var(--text-muted);margin-top:4px" } });
+  lg.createEl("span", { text: "Less" });
+  for (const c of ["var(--background-modifier-border)", "#9be9a8", "#30a14e", "#216e39"]) lg.createEl("span", { attr: { style: `display:inline-block;width:12px;height:12px;border-radius:3px;background:${c}` } });
+  lg.createEl("span", { text: "More   ·   hover a square for the day's %" });
+}
+
+// ---------- hitrate: each habit this month vs last month (inline styles) ----------
+else if (I.kind === "hitrate") {
+  const all = dailies();
+  const thisM = dv.date("today").toFormat("yyyy-MM"), lastM = dv.date("today").minus({ months: 1 }).toFormat("yyyy-MM");
+  const inM = mm => all.where(p => p.date.toFormat("yyyy-MM") === mm);
+  const cur = inM(thisM), prev = inM(lastM);
+  const rate = (g, h) => g.length ? Math.round(g.where(p => p[h] === true).length / g.length * 100) : null;
+  const wrap = dv.el("div", "", { attr: { style: "display:flex;flex-direction:column;gap:8px;margin:6px 0 12px;max-width:720px" } });
+  const rows = HABITS.map(h => ({ h, r: rate(cur, h) ?? 0, p: rate(prev, h), n: cur.where(p => p[h] === true).length })).sort((a, b) => b.r - a.r);
+  for (const { h, r, p, n } of rows) {
+    const line = wrap.createEl("div", { attr: { style: "display:grid;grid-template-columns:110px 1fr 120px;gap:12px;align-items:center" } });
+    line.createEl("div", { text: HLABEL[h], attr: { style: "font-weight:500" } });
+    const track = line.createEl("div", { attr: { style: "height:10px;border-radius:5px;background:var(--background-modifier-border);overflow:hidden" } });
+    track.createEl("div", { attr: { style: `height:100%;width:${r}%;border-radius:5px;background:${r >= 80 ? "#30a14e" : r >= 50 ? "#3282b8" : r > 0 ? "#d9730d" : "transparent"}` } });
+    const delta = p === null ? "" : r > p ? ` ▲${r - p}` : r < p ? ` ▼${p - r}` : " =";
+    const dc = p === null ? "" : r > p ? "#30a14e" : r < p ? "#d44c47" : "var(--text-muted)";
+    const info = line.createEl("div", { attr: { style: "font-size:.85em;white-space:nowrap" } });
+    info.createEl("span", { text: `${r}% · ${n}/${cur.length}d` });
+    if (delta) info.createEl("span", { text: delta, attr: { style: `color:${dc};font-weight:600;margin-left:4px`, title: `Last month: ${p}%` } });
+  }
+  dv.el("div", `${dv.date("today").toFormat("LLLL")}: ${cur.length} day(s) logged. ▲/▼ = change vs last month.`, { attr: { style: "font-size:.8em;color:var(--text-muted)" } });
+}
+
+// ---------- trend: improvement graph (SVG, inline styles) ----------
+else if (I.kind === "trend") {
+  const map = {}; for (const p of dailies()) map[p.date.toFormat("yyyy-MM-dd")] = p;
+  const today = dv.date("today");
+  const first = Object.keys(map).sort()[0];
+  const since = first ? Math.round(today.diff(dv.date(first), "days").days) + 1 : 1;
+  const n = Math.min(I.days || 60, Math.max(14, since));
+  const pts = [];
+  for (let i = n - 1; i >= 0; i--) {
+    const d = today.minus({ days: i }); const p = map[d.toFormat("yyyy-MM-dd")];
+    pts.push({ d, s: p ? score(p) * 100 : null, eng: p ? Number(p.english_minutes) || 0 : 0, hrs: p ? Number(p.study_hours) || 0 : 0 });
+  }
+  // 7-day rolling average (missing days count as 0)
+  const roll = pts.map((_, i) => { const w = pts.slice(Math.max(0, i - 6), i + 1); return w.reduce((a, b) => a + (b.s ?? 0), 0) / w.length; });
+  const W = 760, H = 230, L = 36, R = 12, T = 14, B = 28, iw = W - L - R, ih = H - T - B;
+  const x = i => L + (n === 1 ? iw / 2 : i * iw / (n - 1)), y = v => T + ih - v / 100 * ih;
+  let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="max-width:${W}px;display:block;font-family:inherit">`;
+  for (const g of [0, 25, 50, 75, 100]) svg += `<line x1="${L}" x2="${W - R}" y1="${y(g)}" y2="${y(g)}" stroke="currentColor" stroke-opacity=".12"/><text x="${L - 6}" y="${y(g) + 4}" font-size="10" text-anchor="end" fill="currentColor" fill-opacity=".5">${g}%</text>`;
+  const bw = Math.max(2, iw / n * .6);
+  pts.forEach((p, i) => { if (p.s !== null) svg += `<rect x="${x(i) - bw / 2}" y="${y(p.s)}" width="${bw}" height="${Math.max(0, y(0) - y(p.s))}" rx="1.5" fill="#3282b8" fill-opacity=".35"><title>${p.d.toFormat("d LLL")}: ${Math.round(p.s)}%</title></rect>`; });
+  svg += `<path d="${roll.map((v, i) => `${i ? "L" : "M"}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(" ")}" fill="none" stroke="#30a14e" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>`;
+  const step = Math.ceil(n / 8);
+  pts.forEach((p, i) => { if (i % step === 0 || i === n - 1) svg += `<text x="${x(i)}" y="${H - 8}" font-size="10" text-anchor="${i === n - 1 ? "end" : i === 0 ? "start" : "middle"}" fill="currentColor" fill-opacity=".5">${p.d.toFormat("d LLL")}</text>`; });
+  svg += `</svg>`;
+  const wk = (from) => { let s = 0; for (let i = 0; i < 7; i++) { const p = map[today.minus({ days: from + i }).toFormat("yyyy-MM-dd")]; s += p ? score(p) : 0; } return Math.round(s / 7 * 100); };
+  const thisW = wk(0), lastW = wk(7), diff = thisW - lastW;
+  const sum = (a, k, from, len) => a.slice(a.length - from - len, a.length - from).reduce((x, p) => x + p[k], 0);
+  const engW = sum(pts, "eng", 0, 7), engP = sum(pts, "eng", 7, 7), hrsW = sum(pts, "hrs", 0, 7), hrsP = sum(pts, "hrs", 7, 7);
+  const chip = (label, val, d, unit) => `<span style="display:inline-flex;gap:6px;align-items:baseline;padding:6px 12px;border-radius:8px;background:var(--background-secondary);border:1px solid var(--background-modifier-border)"><span style="font-size:.8em;color:var(--text-muted)">${label}</span><b>${val}${unit}</b><span style="font-size:.8em;font-weight:600;color:${d > 0 ? "#30a14e" : d < 0 ? "#d44c47" : "var(--text-muted)"}">${d > 0 ? "▲" + d : d < 0 ? "▼" + Math.abs(d) : "="}${unit}</span></span>`;
+  const head = dv.el("div", "", { attr: { style: "display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 10px" } });
+  head.innerHTML = chip("Habits this week", thisW, diff, "%") + chip("English this week", engW, engW - engP, " min") + chip("Study this week", Math.round(hrsW * 10) / 10, Math.round((hrsW - hrsP) * 10) / 10, " h");
+  const box = dv.el("div", "", { attr: { style: "border:1px solid var(--background-modifier-border);border-radius:10px;padding:10px 12px;background:var(--background-secondary)" } });
+  box.innerHTML = svg;
+  dv.el("div", "", { attr: { style: "font-size:.8em;color:var(--text-muted);margin-top:6px" } }).innerHTML =
+    `<span style="color:#3282b8">■</span> daily habit score &nbsp; <span style="color:#30a14e">━</span> 7-day average (your improvement line) &nbsp;·&nbsp; changes vs last week`;
+}

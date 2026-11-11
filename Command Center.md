@@ -239,6 +239,21 @@ SORT due ASC
 LIMIT 40
 ```
 
+## 🔥 Consistency
+```dataviewjs
+await dv.view("obsidian/Life Tracker/_views/nt", { kind: "consistency", weeks: 16 })
+```
+
+## 🧩 Habit hit-rate (this month)
+```dataviewjs
+await dv.view("obsidian/Life Tracker/_views/nt", { kind: "hitrate" })
+```
+
+## 📊 Improvement graph
+```dataviewjs
+await dv.view("obsidian/Life Tracker/_views/nt", { kind: "trend", days: 60 })
+```
+
 ## 📊 Habits, last 7 days
 ```dataviewjs
 await dv.view("obsidian/Life Tracker/_views/nt", { kind: "habits", days: 7 })
