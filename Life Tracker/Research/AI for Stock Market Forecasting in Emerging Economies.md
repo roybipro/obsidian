@@ -1,13 +1,15 @@
 ---
 type: research
-stage: accepted
-topics: [stock-forecasting]
-venue: "ICIS 2025 (first author)"
-supervisor: "Md. Mortuza Ahmmed"
+stage: published
+topics:
+  - stock-forecasting
+venue: ICIS 2025 (first author)
+supervisor: Md. Mortuza Ahmmed
 deadline:
 link: ""
-next_step: "Add the final publication link; list on CV and portfolio."
-tags: [research]
+next_step: Add the final publication link; list on CV and portfolio.
+tags:
+  - research
 ---
 # AI for Stock Market Forecasting in Emerging Economies
 
@@ -15,7 +17,9 @@ Stages: idea → literature-review → experimenting → writing → submitted �
 
 ## Notes
 
+
 ## Reading list
+
 
 ## Linked tasks
 ```dataview

@@ -179,7 +179,7 @@ else if (I.kind === "habits") {
     const cells = HABITS.map(h => `<span class="nt-dot ${p && p[h] === true ? "on" : ""}" title="${HLABEL[h]}"></span>`);
     const ME = { great: "🤩", good: "🙂", mixed: "🌗", bad: "😕", awful: "😫", okay: "😐", low: "😕" };
     const mood = p && p.mood ? (ME[String(p.mood).toLowerCase()] || String(p.mood)) : "";
-    rows.push([p ? p.file.link : `<span class="nt-muted">${d.toFormat("ccc d LLL")}</span>`, ...cells, mood, p ? bar(score(p) * 100) : "<span class='nt-muted'>no note</span>"]);
+    rows.push([p ? dv.fileLink(p.file.path, false, d.toFormat("ccc d LLL")) : `<span class="nt-muted">${d.toFormat("ccc d LLL")}</span>`, ...cells, mood, p ? bar(score(p) * 100) : "<span class='nt-muted'>no note</span>"]);
   }
   const t = dv.el("div", "", { cls: "nt-habits" });
   dv.table(["Day", ...HABITS.map(h => HLABEL[h]), "Mood", "Score"], rows);

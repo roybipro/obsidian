@@ -12,7 +12,7 @@ Put tasks that aren't for one specific day here. Add `[due:: YYYY-MM-DD]` so the
 - [ ] Take a full diagnostic IELTS mock test (timed) [due:: 2026-11-15] [[Goal - IELTS 7.0]] #english
 
 ## Research
-- [ ] Fill in TENSYMP 2026 paper title and topics [due:: 2026-11-12] [[IEEE TENSYMP 2026 paper]] #research
+- [x] Fill in TENSYMP 2026 paper title and topics [due:: 2026-11-12] [[IEEE TENSYMP 2026 paper]] #research
 - [ ] Read 10 recent papers on LLM hallucination detection [due:: 2026-11-30] [[Hallucination detection for Bangla LLM outputs]] #research
 - [ ] Search for existing Bangla medical QA datasets [due:: 2026-11-25] [[Bangla medical question answering with RAG]] #research
 

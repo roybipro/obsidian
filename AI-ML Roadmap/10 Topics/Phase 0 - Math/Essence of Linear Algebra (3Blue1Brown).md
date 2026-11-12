@@ -4,7 +4,7 @@ phase: 0
 phase_name: Phase 0 - Math
 kind: course
 order: 1
-status: not-strted
+status: on track
 confidence:
 started:
 completed:
@@ -38,6 +38,13 @@ _What should I be able to do after this topic? Write it in one sentence._
 
 ## 📝 My notes
 ### In my own words
+
+
+> [!NOTE] Vector
+>==The computer science perspective is that vectors are ordered lists of numbers.==
+>
+
+
 
 
 ### Intuition / mental model

@@ -41,7 +41,13 @@ const fill = s => s.replace(/\{\{date:([^}]+)\}\}/g, (_, f) => m().format(f))
                    .replace(/\{\{title\}\}/g, "");
 async function ensure(p) {
   let f = app.vault.getAbstractFileByPath(p.path);
-  if (f) return f;
+  if (f) {
+    if (!(await app.vault.read(f)).trim()) {            // blank note (e.g. created without template)
+      const t = app.vault.getAbstractFileByPath(p.template);
+      if (t) await app.vault.modify(f, fill(await app.vault.read(t)));
+    }
+    return f;
+  }
   const dir = p.path.split("/").slice(0, -1).join("/");
   if (!app.vault.getAbstractFileByPath(dir)) await app.vault.createFolder(dir);
   const t = app.vault.getAbstractFileByPath(p.template);
@@ -129,6 +135,7 @@ function renderPull() {
   }
 }
 for (const p of PLANS) {
+  { const f0 = app.vault.getAbstractFileByPath(p.path); if (p === PLANS[0] ? true : (f0 && !(await app.vault.read(f0)).trim())) await ensure(p); }  // today's note: auto-create every day
   dv.header(3, `${p.title} <small style="font-weight:normal;opacity:.7">· ${p.sub}</small>`);
   const page = dv.page(p.path.replace(/\.md$/, ""));
   const tasks = page ? page.file.tasks.where(t => t.text.trim()) : [];

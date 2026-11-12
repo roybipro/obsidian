@@ -4,7 +4,7 @@ tags: [moc, home]
 updated: 2026-11-11
 cssclasses: [wide-page, nt-page, nt-cover]
 ---
-# 🎛️ Command Center
+a# 🎛️ Command Center
 
 **Mission:** a funded PhD abroad (Fall 2028 intake). Everything you track, plan and study starts here.
 Pin this tab, or set it as your homepage (Settings → Core plugins → Homepage).

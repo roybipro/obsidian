@@ -1,16 +1,19 @@
 ---
 type: topic
 phase: 2
-phase_name: "Phase 2 - Classical ML"
+phase_name: Phase 2 - Classical ML
 kind: course
 order: 13
-status: not-started
+status: not started
 confidence:
 started:
 completed:
 resource: https://www.coursera.org/specializations/machine-learning-introduction
 github:
-tags: [roadmap, phase/2, kind/course]
+tags:
+  - roadmap
+  - phase/2
+  - kind/course
 updated: 2026-11-11
 ---
 # Andrew Ng - Machine Learning Specialization

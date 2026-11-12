@@ -1,10 +1,11 @@
 ---
 type: learning
 area: C++
-status: practiced
+status: not started
 hours: 0
-resource: "DSA repo"
-tags: [learning]
+resource: DSA repo
+tags:
+  - learning
 ---
 # C++ pointers and memory
 

@@ -4,14 +4,17 @@ topic: linked-list
 phase: 6
 order: 5
 difficulty: medium
-status: todo
+status: not-started
 attempts: 0
 solved:
 next_review:
 confidence:
 time_min:
 pattern:
-tags: [dsa, dsa/problem, phase/6]
+tags:
+  - dsa
+  - dsa/problem
+  - phase/6
 updated: 2026-11-11
 ---
 

@@ -1,16 +1,19 @@
 ---
 type: topic
 phase: 2
-phase_name: "Phase 2 - Classical ML"
+phase_name: Phase 2 - Classical ML
 kind: book
 order: 14
-status: not-started
+status: todo
 confidence:
 started:
 completed:
 resource: https://www.statlearning.com/
 github:
-tags: [roadmap, phase/2, kind/book]
+tags:
+  - roadmap
+  - phase/2
+  - kind/book
 updated: 2026-11-11
 ---
 # ISLP - Intro to Statistical Learning (Python)
