@@ -57,8 +57,8 @@ function linkEl(parent, page, text, cls) {
 const html = (el, s) => { el.innerHTML = s; return el; };
 const label = text => { if (text) dv.el("div", text, { cls: "nt-label" }); };
 
-const HABITS = ["english", "paper", "leetcode", "deep_study", "exercise", "sleep", "plan"];
-const HLABEL = { english: "English", paper: "Paper", leetcode: "LeetCode", deep_study: "Deep study", exercise: "Exercise", sleep: "Sleep", plan: "Plan" };
+const HABITS = ["english", "paper", "leetcode", "deep_study", "exercise", "running", "sleep", "plan"];
+const HLABEL = { english: "English", paper: "Paper", leetcode: "LeetCode", deep_study: "Deep study", exercise: "Exercise", running: "Running", sleep: "Sleep", plan: "Plan" };
 const score = p => HABITS.filter(h => p[h] === true).length / HABITS.length;
 const dailies = () => dv.pages(`"${ROOT}/Daily"`).where(p => p.date);
 

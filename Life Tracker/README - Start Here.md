@@ -20,7 +20,7 @@ cssclasses: [nt-page]
 |---|---|
 | [[Command Center]] | your homepage: planner, due tasks, habits, roadmaps, goals |
 | [[DSA Roadmap Home]] · [[AI-ML Roadmap Home]] | the two study roadmaps (in `obsidian/`) |
-| `Daily/` | one note per day (to-dos + habits) |
+| `Daily/` | one note per day (to-dos + habits), sorted into `YEAR/MM Month/` folders |
 | [[📅 Monthly Tracker]] | automatic monthly totals |
 | [[Task Inbox]] | to-dos not tied to one day |
 | `Goals/`, `Research/`, `Learning/`, `Applications/` | one note per item, shown in the hub notes |

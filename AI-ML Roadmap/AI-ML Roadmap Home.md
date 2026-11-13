@@ -20,7 +20,7 @@ Math → Data Toolkit → Classical ML → Deep Learning → **NLP & LLMs** → 
 const ROOT = "obsidian/Life Tracker";
 const m = window.moment;
 const PLANS = [
-  { title: "📝 Today", sub: m().format("dddd, D MMMM"), path: `${ROOT}/Daily/${m().format("YYYY-MM-DD")}.md`,
+  { title: "📝 Today", sub: m().format("dddd, D MMMM"), path: `${ROOT}/Daily/${m().format("YYYY/MM MMMM/YYYY-MM-DD")}.md`,
     heading: "## ✅ Today's to-do", template: `${ROOT}/Templates/Daily Note.md`, ph: "Add a task for today…" },
   { title: "📅 This week", sub: `Week ${m().isoWeek()} · ${m().startOf("isoWeek").format("D MMM")} – ${m().endOf("isoWeek").format("D MMM")}`,
     path: `${ROOT}/Plans/Weekly/${m().format("GGGG-[W]WW")}.md`, heading: "## 🎯 Plan",
@@ -49,7 +49,7 @@ async function ensure(p) {
     return f;
   }
   const dir = p.path.split("/").slice(0, -1).join("/");
-  if (!app.vault.getAbstractFileByPath(dir)) await app.vault.createFolder(dir);
+  { let acc = ""; for (const part of dir.split("/")) { acc = acc ? `${acc}/${part}` : part; if (!app.vault.getAbstractFileByPath(acc)) await app.vault.createFolder(acc); } }  // makes year + month folders
   const t = app.vault.getAbstractFileByPath(p.template);
   const body = t ? fill(await app.vault.read(t)) : `${p.heading}\n`;
   return await app.vault.create(p.path, body);

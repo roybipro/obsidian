@@ -6,7 +6,11 @@ paper: false
 leetcode: false
 deep_study: false
 exercise: false
+running: false
+running_km: 0
+running_min: 0
 sleep: false
+sleep_hours: 0
 plan: false
 english_minutes: 0
 study_hours: 0
@@ -21,7 +25,7 @@ tags:
 await dv.view("obsidian/Life Tracker/_views/nt", { kind: "mood" })
 ```
 
-> Tick your habits in the **Properties** above (English, paper, LeetCode, deep study, exercise, sleep, plan). They feed the Home dashboard and the [[📅 Monthly Tracker]].
+> Tick your habits in the **Properties** above (English, paper, LeetCode, deep study, exercise, running, sleep, plan). They feed the Home dashboard and the [[📅 Monthly Tracker]].
 
 ## 🎯 Top 3 priorities
 1. 
@@ -40,4 +44,4 @@ await dv.view("obsidian/Life Tracker/_views/nt", { kind: "mood" })
 ## 🏆 Wins / notes
 
 ---
-Today's score: `$= const H=["english", "paper", "leetcode", "deep_study", "exercise", "sleep", "plan"]; const p=dv.current(); const n=H.filter(h=>p[h]===true).length; "●".repeat(n)+"○".repeat(H.length-n)+"  "+Math.round(n/H.length*100)+"%"`
+Today's score: `$= const H=["english", "paper", "leetcode", "deep_study", "exercise", "running", "sleep", "plan"]; const p=dv.current(); const n=H.filter(h=>p[h]===true).length; "●".repeat(n)+"○".repeat(H.length-n)+"  "+Math.round(n/H.length*100)+"%"`
