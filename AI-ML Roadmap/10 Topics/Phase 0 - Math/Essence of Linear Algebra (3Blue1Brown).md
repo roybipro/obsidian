@@ -30,7 +30,7 @@ _What should I be able to do after this topic? Write it in one sentence._
 
 
 ## ✅ Key concepts
-- [ ] Vectors as arrows and lists
+- [x] Vectors as arrows and lists
 - [ ] Linear transformations as matrices
 - [ ] Matrix multiplication as composition
 - [ ] Determinant as area/volume scaling
@@ -43,6 +43,9 @@ _What should I be able to do after this topic? Write it in one sentence._
 > [!NOTE] Vector
 >==The computer science perspective is that vectors are ordered lists of numbers.==
 >
+
+> [!NOTE] **Linear transformations and matrices**
+> Contents
 
 
 
