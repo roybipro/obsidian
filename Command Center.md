@@ -19,9 +19,9 @@ await dv.view("obsidian/Life Tracker/_views/nt", { kind: "stats" })
 const R = "obsidian/Life Tracker", m = window.moment;
 const fill = s => s.replace(/\{\{date:([^}]+)\}\}/g, (_, f) => m().format(f)).replace(/\{\{date\}\}/g, m().format("YYYY-MM-DD")).replace(/\{\{title\}\}/g, "");
 const LINKS = [
-  { icon: "📝", label: "Today's note", path: `${R}/Daily/${m().format("YYYY/MM MMMM/YYYY-MM-DD")}.md`, tpl: `${R}/Templates/Daily Note.md` },
-  { icon: "📅", label: "This week's plan", path: `${R}/Plans/Weekly/${m().format("GGGG-[W]WW")}.md`, tpl: `${R}/Templates/Weekly Plan.md` },
-  { icon: "🗓️", label: "This month's plan", path: `${R}/Plans/Monthly/${m().format("YYYY-MM")}.md`, tpl: `${R}/Templates/Monthly Plan.md` },
+  { icon: "📝", label: "Today's note", path: `${R}/Journal/Daily/${m().format("YYYY/MM MMMM/YYYY-MM-DD")}.md`, tpl: `${R}/Templates/Daily Note.md` },
+  { icon: "📅", label: "This week's plan", path: `${R}/Journal/Plans/Weekly/${m().startOf("isoWeek").format("YYYY")}/${m().startOf("isoWeek").format("MM MMMM")}/${m().format("GGGG-[W]WW")}.md`, tpl: `${R}/Templates/Weekly Plan.md` },
+  { icon: "🗓️", label: "This month's plan", path: `${R}/Journal/Plans/Monthly/${m().format("YYYY")}/${m().format("MM MMMM")}/${m().format("YYYY-MM")}.md`, tpl: `${R}/Templates/Monthly Plan.md` },
 ];
 async function openNote(l) {
   const t = app.vault.getAbstractFileByPath(l.tpl);
@@ -43,6 +43,8 @@ LINKS.forEach((l, i) => {
 });
 ```
 
+📆 [[📆 Weekly Review]] · 🗓️ [[🗓️ Monthly Review]]
+
 ## 🗂️ Planner: add your to-dos here
 > Type a task and press **Enter**. Today's list starts fresh every day, the weekly list every Monday, the monthly list on the 1st. Type a topic, paper or problem name to link it.
 
@@ -50,12 +52,12 @@ LINKS.forEach((l, i) => {
 const ROOT = "obsidian/Life Tracker";
 const m = window.moment;
 const PLANS = [
-  { title: "📝 Today", sub: m().format("dddd, D MMMM"), path: `${ROOT}/Daily/${m().format("YYYY/MM MMMM/YYYY-MM-DD")}.md`,
+  { title: "📝 Today", sub: m().format("dddd, D MMMM"), path: `${ROOT}/Journal/Daily/${m().format("YYYY/MM MMMM/YYYY-MM-DD")}.md`,
     heading: "## ✅ Today's to-do", template: `${ROOT}/Templates/Daily Note.md`, ph: "Add a task for today…" },
   { title: "📅 This week", sub: `Week ${m().isoWeek()} · ${m().startOf("isoWeek").format("D MMM")} – ${m().endOf("isoWeek").format("D MMM")}`,
-    path: `${ROOT}/Plans/Weekly/${m().format("GGGG-[W]WW")}.md`, heading: "## 🎯 Plan",
+    path: `${ROOT}/Journal/Plans/Weekly/${m().startOf("isoWeek").format("YYYY")}/${m().startOf("isoWeek").format("MM MMMM")}/${m().format("GGGG-[W]WW")}.md`, heading: "## 🎯 Plan",
     template: `${ROOT}/Templates/Weekly Plan.md`, ph: "Add a goal for this week…" },
-  { title: "🗓️ This month", sub: m().format("MMMM YYYY"), path: `${ROOT}/Plans/Monthly/${m().format("YYYY-MM")}.md`,
+  { title: "🗓️ This month", sub: m().format("MMMM YYYY"), path: `${ROOT}/Journal/Plans/Monthly/${m().format("YYYY")}/${m().format("MM MMMM")}/${m().format("YYYY-MM")}.md`,
     heading: "## 🎯 Plan", template: `${ROOT}/Templates/Monthly Plan.md`, ph: "Add a goal for this month…" },
 ];
 const roadmapPages = dv.pages('"obsidian/AI-ML Roadmap/10 Topics"').where(t => t.type === "topic").concat(dv.pages('"obsidian/DSA Roadmap/10 Topics"').where(t => t.type === "topic")).sort(t => t.order, "asc");
@@ -249,7 +251,7 @@ for (const p of PLANS) {
 }
 // carry-over
 const today = dv.date("today");
-const old = dv.pages(`"${ROOT}/Daily"`)
+const old = dv.pages(`"${ROOT}/Journal/Daily"`)
   .where(p => p.date && p.date < today && p.date >= today.minus({ days: 14 }))
   .file.tasks.where(t => !t.completed && t.text.trim());
 if (old.length) {
@@ -301,7 +303,7 @@ const lineChart = (vals, labels, o) => {
   const dots = pts.map((p, i) => vals[i] > 0 ? `<g><title>${labels[i] || ""}: ${fmt1(vals[i])} ${o.unit}</title><circle cx="${p[0]}" cy="${p[1]}" r="3.5" fill="#e0f2fe"/><text x="${p[0]}" y="${p[1] - 9}" text-anchor="middle" font-size="10" font-weight="600" fill="#e0f2fe">${fmt1(vals[i])}</text></g>` : "").join("");
   return `<svg viewBox="0 0 ${W} ${H}" width="100%" style="display:block;overflow:visible">${g}<path d="${d}" fill="none" stroke="${o.color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="filter:drop-shadow(0 0 4px ${o.color})"/>${dots}</svg>`;
 };
-const days = dv.pages('"obsidian/Life Tracker/Daily"').where(p => p.date).sort(p => p.date, "asc");
+const days = dv.pages('"obsidian/Life Tracker/Journal/Daily"').where(p => p.date).sort(p => p.date, "asc");
 const hrs = p => Number(p.sleep_hours) || 0;
 const today = dv.date("today");
 const avg = (a, b) => { const xs = days.where(p => p.date >= a && p.date <= b).array().map(hrs).filter(h => h > 0); return xs.length ? { v: xs.reduce((s, h) => s + h, 0) / xs.length, n: xs.length } : null; };
@@ -359,7 +361,7 @@ const lineChart = (vals, labels, o) => {
   const dots = pts.map((p, i) => vals[i] > 0 ? `<g><title>${labels[i] || ""}: ${fmt1(vals[i])} ${o.unit}</title><circle cx="${p[0]}" cy="${p[1]}" r="3.5" fill="#e0f2fe"/><text x="${p[0]}" y="${p[1] - 9}" text-anchor="middle" font-size="10" font-weight="600" fill="#e0f2fe">${fmt1(vals[i])}</text></g>` : "").join("");
   return `<svg viewBox="0 0 ${W} ${H}" width="100%" style="display:block;overflow:visible">${g}<path d="${d}" fill="none" stroke="${o.color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="filter:drop-shadow(0 0 4px ${o.color})"/>${dots}</svg>`;
 };
-const days = dv.pages('"obsidian/Life Tracker/Daily"').where(p => p.date).sort(p => p.date, "asc");
+const days = dv.pages('"obsidian/Life Tracker/Journal/Daily"').where(p => p.date).sort(p => p.date, "asc");
 const hrs = p => Number(p.study_hours) || 0;
 const today = dv.date("today");
 const sum = (a, b) => days.where(p => p.date >= a && p.date <= b).array().reduce((s, p) => s + hrs(p), 0);
@@ -418,7 +420,7 @@ const lineChart = (vals, labels, o) => {
   const dots = pts.map((p, i) => vals[i] > 0 ? `<g><title>${labels[i] || ""}: ${fmt1(vals[i])} ${o.unit}</title><circle cx="${p[0]}" cy="${p[1]}" r="3.5" fill="#e0f2fe"/><text x="${p[0]}" y="${p[1] - 9}" text-anchor="middle" font-size="10" font-weight="600" fill="#e0f2fe">${fmt1(vals[i])}</text></g>` : "").join("");
   return `<svg viewBox="0 0 ${W} ${H}" width="100%" style="display:block;overflow:visible">${g}<path d="${d}" fill="none" stroke="${o.color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="filter:drop-shadow(0 0 4px ${o.color})"/>${dots}</svg>`;
 };
-const days = dv.pages('"obsidian/Life Tracker/Daily"').where(p => p.date).sort(p => p.date, "asc");
+const days = dv.pages('"obsidian/Life Tracker/Journal/Daily"').where(p => p.date).sort(p => p.date, "asc");
 const km = p => Number(p.running_km) || 0;
 const mins = p => Number(p.running_min) || 0;
 const today = dv.date("today");
@@ -499,11 +501,11 @@ await dv.view("obsidian/Life Tracker/_views/nt", { kind: "table", source: '"obsi
 ## 🗓️ Recent plans
 **Weekly:**
 ```dataview
-LIST FROM "obsidian/Life Tracker/Plans/Weekly" SORT file.name DESC LIMIT 6
+LIST FROM "obsidian/Life Tracker/Journal/Plans/Weekly" SORT file.name DESC LIMIT 6
 ```
 **Monthly:**
 ```dataview
-LIST FROM "obsidian/Life Tracker/Plans/Monthly" SORT file.name DESC LIMIT 6
+LIST FROM "obsidian/Life Tracker/Journal/Plans/Monthly" SORT file.name DESC LIMIT 6
 ```
 
 ## 🧭 Navigate

@@ -20,12 +20,12 @@ await dv.view("obsidian/Life Tracker/_views/nt", { kind: "stats" })
 const ROOT = "obsidian/Life Tracker";
 const m = window.moment;
 const PLANS = [
-  { title: "📝 Today", sub: m().format("dddd, D MMMM"), path: `${ROOT}/Daily/${m().format("YYYY/MM MMMM/YYYY-MM-DD")}.md`,
+  { title: "📝 Today", sub: m().format("dddd, D MMMM"), path: `${ROOT}/Journal/Daily/${m().format("YYYY/MM MMMM/YYYY-MM-DD")}.md`,
     heading: "## ✅ Today's to-do", template: `${ROOT}/Templates/Daily Note.md`, ph: "Add a task for today…" },
   { title: "📅 This week", sub: `Week ${m().isoWeek()} · ${m().startOf("isoWeek").format("D MMM")} – ${m().endOf("isoWeek").format("D MMM")}`,
-    path: `${ROOT}/Plans/Weekly/${m().format("GGGG-[W]WW")}.md`, heading: "## 🎯 Plan",
+    path: `${ROOT}/Journal/Plans/Weekly/${m().startOf("isoWeek").format("YYYY")}/${m().startOf("isoWeek").format("MM MMMM")}/${m().format("GGGG-[W]WW")}.md`, heading: "## 🎯 Plan",
     template: `${ROOT}/Templates/Weekly Plan.md`, ph: "Add a goal for this week…" },
-  { title: "🗓️ This month", sub: m().format("MMMM YYYY"), path: `${ROOT}/Plans/Monthly/${m().format("YYYY-MM")}.md`,
+  { title: "🗓️ This month", sub: m().format("MMMM YYYY"), path: `${ROOT}/Journal/Plans/Monthly/${m().format("YYYY")}/${m().format("MM MMMM")}/${m().format("YYYY-MM")}.md`,
     heading: "## 🎯 Plan", template: `${ROOT}/Templates/Monthly Plan.md`, ph: "Add a goal for this month…" },
 ];
 const roadmapPages = dv.pages('"obsidian/AI-ML Roadmap/10 Topics"').where(t => t.type === "topic").sort(t => t.order, "asc");
@@ -219,7 +219,7 @@ for (const p of PLANS) {
 }
 // carry-over
 const today = dv.date("today");
-const old = dv.pages(`"${ROOT}/Daily"`)
+const old = dv.pages(`"${ROOT}/Journal/Daily"`)
   .where(p => p.date && p.date < today && p.date >= today.minus({ days: 14 }))
   .file.tasks.where(t => !t.completed && t.text.trim());
 if (old.length) {
@@ -249,7 +249,7 @@ GROUP BY file.link
 const HABITS = ["english", "paper", "leetcode", "deep_study", "exercise", "running", "sleep", "plan"];
 const LABELS = {"english": "English 45m", "paper": "Read 1 paper", "leetcode": "LeetCode", "deep_study": "Deep study 90m", "exercise": "Exercise 30m", "running": "Running", "sleep": "Sleep 7h+", "plan": "Plan tomorrow"};
 const score = p => HABITS.filter(h => p[h] === true).length / HABITS.length;
-const days = dv.pages('"obsidian/Life Tracker/Daily"').where(p => p.date).sort(p => p.date, 'asc');
+const days = dv.pages('"obsidian/Life Tracker/Journal/Daily"').where(p => p.date).sort(p => p.date, 'asc');
 
 const byDate = {};
 for (const p of days) byDate[p.date.toFormat('yyyy-MM-dd')] = score(p);
@@ -281,7 +281,7 @@ dv.paragraph('<small>⬜ no note · 🟩 light = some · green = 50%+ · dark = 
 const HABITS = ["english", "paper", "leetcode", "deep_study", "exercise", "running", "sleep", "plan"];
 const LABELS = {"english": "English 45m", "paper": "Read 1 paper", "leetcode": "LeetCode", "deep_study": "Deep study 90m", "exercise": "Exercise 30m", "running": "Running", "sleep": "Sleep 7h+", "plan": "Plan tomorrow"};
 const score = p => HABITS.filter(h => p[h] === true).length / HABITS.length;
-const days = dv.pages('"obsidian/Life Tracker/Daily"').where(p => p.date).sort(p => p.date, 'asc');
+const days = dv.pages('"obsidian/Life Tracker/Journal/Daily"').where(p => p.date).sort(p => p.date, 'asc');
 
 const map = {};
 for (const p of days) map[p.date.toFormat('yyyy-MM-dd')] = score(p);
@@ -298,7 +298,7 @@ dv.paragraph('<small>Daily habit score, oldest → today. Hover for values.</sma
 const HABITS = ["english", "paper", "leetcode", "deep_study", "exercise", "running", "sleep", "plan"];
 const LABELS = {"english": "English 45m", "paper": "Read 1 paper", "leetcode": "LeetCode", "deep_study": "Deep study 90m", "exercise": "Exercise 30m", "running": "Running", "sleep": "Sleep 7h+", "plan": "Plan tomorrow"};
 const score = p => HABITS.filter(h => p[h] === true).length / HABITS.length;
-const days = dv.pages('"obsidian/Life Tracker/Daily"').where(p => p.date).sort(p => p.date, 'asc');
+const days = dv.pages('"obsidian/Life Tracker/Journal/Daily"').where(p => p.date).sort(p => p.date, 'asc');
 
 const m = dv.date('today').toFormat('yyyy-MM');
 const month = days.where(p => p.date.toFormat('yyyy-MM') === m);
@@ -332,7 +332,7 @@ const lineChart = (vals, labels, o) => {
   const dots = pts.map((p, i) => vals[i] > 0 ? `<g><title>${labels[i] || ""}: ${fmt1(vals[i])} ${o.unit}</title><circle cx="${p[0]}" cy="${p[1]}" r="3.5" fill="#e0f2fe"/><text x="${p[0]}" y="${p[1] - 9}" text-anchor="middle" font-size="10" font-weight="600" fill="#e0f2fe">${fmt1(vals[i])}</text></g>` : "").join("");
   return `<svg viewBox="0 0 ${W} ${H}" width="100%" style="display:block;overflow:visible">${g}<path d="${d}" fill="none" stroke="${o.color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="filter:drop-shadow(0 0 4px ${o.color})"/>${dots}</svg>`;
 };
-const days = dv.pages('"obsidian/Life Tracker/Daily"').where(p => p.date).sort(p => p.date, "asc");
+const days = dv.pages('"obsidian/Life Tracker/Journal/Daily"').where(p => p.date).sort(p => p.date, "asc");
 const hrs = p => Number(p.sleep_hours) || 0;
 const today = dv.date("today");
 const avg = (a, b) => { const xs = days.where(p => p.date >= a && p.date <= b).array().map(hrs).filter(h => h > 0); return xs.length ? { v: xs.reduce((s, h) => s + h, 0) / xs.length, n: xs.length } : null; };
@@ -390,7 +390,7 @@ const lineChart = (vals, labels, o) => {
   const dots = pts.map((p, i) => vals[i] > 0 ? `<g><title>${labels[i] || ""}: ${fmt1(vals[i])} ${o.unit}</title><circle cx="${p[0]}" cy="${p[1]}" r="3.5" fill="#e0f2fe"/><text x="${p[0]}" y="${p[1] - 9}" text-anchor="middle" font-size="10" font-weight="600" fill="#e0f2fe">${fmt1(vals[i])}</text></g>` : "").join("");
   return `<svg viewBox="0 0 ${W} ${H}" width="100%" style="display:block;overflow:visible">${g}<path d="${d}" fill="none" stroke="${o.color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="filter:drop-shadow(0 0 4px ${o.color})"/>${dots}</svg>`;
 };
-const days = dv.pages('"obsidian/Life Tracker/Daily"').where(p => p.date).sort(p => p.date, "asc");
+const days = dv.pages('"obsidian/Life Tracker/Journal/Daily"').where(p => p.date).sort(p => p.date, "asc");
 const hrs = p => Number(p.study_hours) || 0;
 const today = dv.date("today");
 const sum = (a, b) => days.where(p => p.date >= a && p.date <= b).array().reduce((s, p) => s + hrs(p), 0);
@@ -449,7 +449,7 @@ const lineChart = (vals, labels, o) => {
   const dots = pts.map((p, i) => vals[i] > 0 ? `<g><title>${labels[i] || ""}: ${fmt1(vals[i])} ${o.unit}</title><circle cx="${p[0]}" cy="${p[1]}" r="3.5" fill="#e0f2fe"/><text x="${p[0]}" y="${p[1] - 9}" text-anchor="middle" font-size="10" font-weight="600" fill="#e0f2fe">${fmt1(vals[i])}</text></g>` : "").join("");
   return `<svg viewBox="0 0 ${W} ${H}" width="100%" style="display:block;overflow:visible">${g}<path d="${d}" fill="none" stroke="${o.color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="filter:drop-shadow(0 0 4px ${o.color})"/>${dots}</svg>`;
 };
-const days = dv.pages('"obsidian/Life Tracker/Daily"').where(p => p.date).sort(p => p.date, "asc");
+const days = dv.pages('"obsidian/Life Tracker/Journal/Daily"').where(p => p.date).sort(p => p.date, "asc");
 const km = p => Number(p.running_km) || 0;
 const mins = p => Number(p.running_min) || 0;
 const today = dv.date("today");
@@ -487,8 +487,8 @@ dv.paragraph("<small>Enter <code>running_km</code> (distance) and <code>running_
 ```dataviewjs
 const ROOT = "obsidian/Life Tracker";
 const today = dv.date("today");
-const days = dv.pages(`"${ROOT}/Daily"`).where(p => p.date);
-const weekly = dv.pages(`"${ROOT}/Plans/Weekly"`);
+const days = dv.pages(`"${ROOT}/Journal/Daily"`).where(p => p.date);
+const weekly = dv.pages(`"${ROOT}/Journal/Plans/Weekly"`);
 const topics = dv.pages(`"obsidian/AI-ML Roadmap/10 Topics"`).where(p => p.type === "topic");
 const key = d => d.toFormat("yyyy-MM-dd");
 const wkey = d => d.toFormat("kkkk-'W'WW");

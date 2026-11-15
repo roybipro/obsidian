@@ -20,12 +20,12 @@ Math → Data Toolkit → Classical ML → Deep Learning → **NLP & LLMs** → 
 const ROOT = "obsidian/Life Tracker";
 const m = window.moment;
 const PLANS = [
-  { title: "📝 Today", sub: m().format("dddd, D MMMM"), path: `${ROOT}/Daily/${m().format("YYYY/MM MMMM/YYYY-MM-DD")}.md`,
+  { title: "📝 Today", sub: m().format("dddd, D MMMM"), path: `${ROOT}/Journal/Daily/${m().format("YYYY/MM MMMM/YYYY-MM-DD")}.md`,
     heading: "## ✅ Today's to-do", template: `${ROOT}/Templates/Daily Note.md`, ph: "Add a task for today…" },
   { title: "📅 This week", sub: `Week ${m().isoWeek()} · ${m().startOf("isoWeek").format("D MMM")} – ${m().endOf("isoWeek").format("D MMM")}`,
-    path: `${ROOT}/Plans/Weekly/${m().format("GGGG-[W]WW")}.md`, heading: "## 🎯 Plan",
+    path: `${ROOT}/Journal/Plans/Weekly/${m().startOf("isoWeek").format("YYYY")}/${m().startOf("isoWeek").format("MM MMMM")}/${m().format("GGGG-[W]WW")}.md`, heading: "## 🎯 Plan",
     template: `${ROOT}/Templates/Weekly Plan.md`, ph: "Add a goal for this week…" },
-  { title: "🗓️ This month", sub: m().format("MMMM YYYY"), path: `${ROOT}/Plans/Monthly/${m().format("YYYY-MM")}.md`,
+  { title: "🗓️ This month", sub: m().format("MMMM YYYY"), path: `${ROOT}/Journal/Plans/Monthly/${m().format("YYYY")}/${m().format("MM MMMM")}/${m().format("YYYY-MM")}.md`,
     heading: "## 🎯 Plan", template: `${ROOT}/Templates/Monthly Plan.md`, ph: "Add a goal for this month…" },
 ];
 const roadmapPages = dv.pages('"obsidian/AI-ML Roadmap/10 Topics"').where(t => t.type === "topic").sort(t => t.order, "asc");
@@ -219,7 +219,7 @@ for (const p of PLANS) {
 }
 // carry-over
 const today = dv.date("today");
-const old = dv.pages(`"${ROOT}/Daily"`)
+const old = dv.pages(`"${ROOT}/Journal/Daily"`)
   .where(p => p.date && p.date < today && p.date >= today.minus({ days: 14 }))
   .file.tasks.where(t => !t.completed && t.text.trim());
 if (old.length) {
@@ -293,8 +293,8 @@ LIMIT 5
 ```dataviewjs
 const ROOT = "obsidian/Life Tracker";
 const today = dv.date("today");
-const days = dv.pages(`"${ROOT}/Daily"`).where(p => p.date);
-const weekly = dv.pages(`"${ROOT}/Plans/Weekly"`);
+const days = dv.pages(`"${ROOT}/Journal/Daily"`).where(p => p.date);
+const weekly = dv.pages(`"${ROOT}/Journal/Plans/Weekly"`);
 const topics = dv.pages(`"obsidian/AI-ML Roadmap/10 Topics"`).where(p => p.type === "topic");
 const key = d => d.toFormat("yyyy-MM-dd");
 const wkey = d => d.toFormat("kkkk-'W'WW");
@@ -369,7 +369,7 @@ if (topics.length) {
 ## 📅 Recent study days
 ```dataview
 TABLE WITHOUT ID file.link AS "Day", study_hours AS "Hours", topics AS "Topics"
-FROM "obsidian/Life Tracker/Daily" WHERE type = "daily"
+FROM "obsidian/Life Tracker/Journal/Daily" WHERE type = "daily"
 SORT date DESC
 LIMIT 7
 ```

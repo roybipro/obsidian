@@ -9,7 +9,7 @@ Back to [[AI-ML Roadmap Home]] · Your [[🏠 Home]] · [[Learning Hub]]
 
 ## How it fits your vault
 - Roadmap pages live in `AI-ML Roadmap/`. One full study page per topic, grouped by phase.
-- Study hours come from your **existing daily notes** (`Life Tracker/Daily`, `study_hours`).
+- Study hours come from your **existing daily notes** (`Life Tracker/Journal/Daily`, `study_hours`).
 - To link a study day to topics, add a `topics` property to that day's daily note, e.g.
   `topics: ["[[Attention and Transformers]]"]`. Your Daily Note template already has it.
 - Templates were added to `Life Tracker/Templates`: *Roadmap Weekly Review*, *Roadmap Paper*, *Roadmap Topic Page*.

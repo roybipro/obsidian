@@ -12,7 +12,7 @@ tags: [weekly]
 ## Hours this week
 ```dataview
 TABLE WITHOUT ID sum(rows.study_hours) AS "Total hours", length(rows) AS "Study days"
-FROM "obsidian/Life Tracker/Daily" WHERE date >= this.week_of AND date < this.week_of + dur(7 days)
+FROM "obsidian/Life Tracker/Journal/Daily" WHERE date >= this.week_of AND date < this.week_of + dur(7 days)
 GROUP BY "week"
 ```
 

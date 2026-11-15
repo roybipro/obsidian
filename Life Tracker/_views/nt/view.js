@@ -60,7 +60,7 @@ const label = text => { if (text) dv.el("div", text, { cls: "nt-label" }); };
 const HABITS = ["english", "paper", "leetcode", "deep_study", "exercise", "running", "sleep", "plan"];
 const HLABEL = { english: "English", paper: "Paper", leetcode: "LeetCode", deep_study: "Deep study", exercise: "Exercise", running: "Running", sleep: "Sleep", plan: "Plan" };
 const score = p => HABITS.filter(h => p[h] === true).length / HABITS.length;
-const dailies = () => dv.pages(`"${ROOT}/Daily"`).where(p => p.date);
+const dailies = () => dv.pages(`"${ROOT}/Journal/Daily"`).where(p => p.date);
 
 // ---------- stats: Notion-style KPI tiles ----------
 if (I.kind === "stats") {

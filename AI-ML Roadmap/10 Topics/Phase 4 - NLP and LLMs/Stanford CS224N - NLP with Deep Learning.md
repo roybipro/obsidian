@@ -63,7 +63,7 @@ TABLE status, year FROM "obsidian/AI-ML Roadmap/20 Papers" WHERE contains(topics
 
 ## 📅 Study log
 ```dataview
-TABLE study_hours AS "Hours" FROM "obsidian/Life Tracker/Daily"
+TABLE study_hours AS "Hours" FROM "obsidian/Life Tracker/Journal/Daily"
 WHERE contains(topics, this.file.link) SORT file.name DESC
 ```
 
