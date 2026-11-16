@@ -57,7 +57,7 @@ for (let i = 0; i < N; i++) {
   rows.push([d.toFormat("ccc dd LLL"), p ? `${hT.length}/${HABITS.length}` : "—", kmV ? fmt1(kmV) : "", slV ? fmt1(slV) : "", stV ? fmt1(stV) : "", p ? "✓" : ""]);
 }
 dv.header(3, `${MODE === "weekly" ? "Week " + today.toFormat("kkkk-'W'WW") + " · " : ""}${start.toFormat("d LLL")} – ${end.toFormat("d LLL yyyy")}`);
-const plan = MODE === "weekly" ? `obsidian/Life Tracker/Journal/Plans/Weekly/${today.startOf("isoWeek").toFormat("yyyy")}/${today.startOf("isoWeek").toFormat("MM MMMM")}/${today.toFormat("kkkk-'W'WW")}` : `obsidian/Life Tracker/Journal/Plans/Monthly/${today.toFormat("yyyy")}/${today.toFormat("MM MMMM")}/${today.toFormat("yyyy-MM")}`;
+const plan = MODE === "weekly" ? `obsidian/Life Tracker/Journal/Plans/Weekly/${today.startOf("week").toFormat("yyyy")}/${today.startOf("week").toFormat("MM MMMM")}/${today.toFormat("kkkk-'W'WW")}` : `obsidian/Life Tracker/Journal/Plans/Monthly/${today.toFormat("yyyy")}/${today.toFormat("MM MMMM")}/${today.toFormat("yyyy-MM")}`;
 dv.paragraph(`${dv.fileLink(plan, false, MODE === "weekly" ? "Weekly plan" : "Monthly plan")} · ${elapsed} of ${N} days elapsed`);
 const cards = [
   ["Running", `${fmt1(km)} km`, `⏱ ${fmtT(kmMin)} · ⚡ ${pace(km, kmMin)}`, "#7dd3fc"],
