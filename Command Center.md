@@ -140,6 +140,40 @@ async function syncBack() {
   }
 }
 await syncBack();
+// ---- clickable to-dos: the checkbox or the row toggles the task in its note ----
+const OB = window.require ? window.require("obsidian") : null;
+async function setTask(p, line, done) {
+  const f = app.vault.getAbstractFileByPath(p.path);
+  if (!f) return;
+  await app.vault.process(f, s => {
+    const lines = s.split("\n");
+    if (/^\s*- \[.\]/.test(lines[line] || "")) lines[line] = lines[line].replace(/- \[.\]/, done ? "- [x]" : "- [ ]");
+    return lines.join("\n");
+  });
+}
+async function renderTodos(p, tasks) {
+  const box = dv.el("div", "", { attr: { style: "display:flex;flex-direction:column;gap:2px;margin:0 0 6px" } });
+  for (const t of tasks.array()) {
+    const row = box.createEl("div", { attr: { style: "display:flex;align-items:flex-start;gap:8px;cursor:pointer;padding:2px 4px;border-radius:6px" } });
+    const cb = row.createEl("input", { type: "checkbox", attr: { style: "margin-top:5px;cursor:pointer" } });
+    cb.checked = !!t.completed;
+    const label = row.createEl("span", { attr: { style: t.completed ? "flex:1;text-decoration:line-through;opacity:.6" : "flex:1" } });
+    const clean = t.text.replace(/\s*\[from:: (week|month)\]/, "");
+    const comp = dv.component || (OB ? new OB.Component() : null);
+    if (OB && OB.MarkdownRenderer && comp) await OB.MarkdownRenderer.render(app, clean, label, p.path, comp);
+    else label.textContent = clean;
+    const save = async () => {
+      await setTask(p, t.line, cb.checked);
+      if (/\[from:: (week|month)\]/.test(t.text)) await syncBack();
+    };
+    cb.onchange = save;
+    row.onclick = async e => {
+      if (e.target === cb || (e.target.closest && e.target.closest("a"))) return;
+      cb.checked = !cb.checked;
+      await save();
+    };
+  }
+}
 function renderPull() {
   const td = dv.page(PLANS[0].path.replace(/\.md$/, ""));
   const already = new Set(td ? td.file.tasks.map(t => strip(t.text)).array() : []);
@@ -174,7 +208,7 @@ for (const p of PLANS) {
   const total = tasks.length, done = page ? tasks.where(t => t.completed).length : 0;
   if (page) {
     dv.paragraph(`${barHtml(done, total)} · ${dv.fileLink(p.path, false, "open note")}`);
-    if (total) dv.taskList(tasks, false); else dv.paragraph("<small>Nothing planned yet.</small>");
+    if (total) await renderTodos(p, tasks); else dv.paragraph("<small>Nothing planned yet.</small>");
   } else {
     dv.paragraph("<small>Nothing planned yet. Add the first task below and the note is created for you.</small>");
   }
